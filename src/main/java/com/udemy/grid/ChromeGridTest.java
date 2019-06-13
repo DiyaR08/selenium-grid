@@ -19,29 +19,35 @@ public class ChromeGridTest {
 
 	@BeforeTest
 	public void setUp() throws MalformedURLException {
+		new DesiredCapabilities();
 		// 1. Define Desired Capabilities
-		DesiredCapabilities cap = new DesiredCapabilities().chrome();
+		DesiredCapabilities cap = DesiredCapabilities.chrome();
 		cap.setPlatform(Platform.MAC);
 		cap.setBrowserName("chrome");
+		
+		//Chrome Options definition
+		ChromeOptions options = new ChromeOptions();
+		options.merge(cap);
 
-		String hubUrl = "http://192.168.1.8:4444/wd/hub";
-		driver = new RemoteWebDriver(new URL(hubUrl), cap);
+		String hubUrl = "http://192.168.1.8:4444/wd/hub";//wd - webdriver
+		driver = new RemoteWebDriver(new URL(hubUrl), options);
 	}
 
-	/*@AfterTest
+	@AfterTest
 	public void closeBrowser() {
 		driver.quit();
-	}*/
+	}
 
 	@Test
 	public void verifyTitle() {
 		driver.get("http://www.freecrm.com");
 		System.out.println(driver.getTitle());
-		
-		String expectedTitle = "Free CRM software in the cloud for sales and service";
+	
 		String actualTitle = driver.getTitle();
 		
-		Assert.assertEquals(actualTitle, expectedTitle);
+		//Assert.assertEquals(actualTitle, expectedTitle);
+		
+		Assert.assertTrue(actualTitle.contains("Free CRM software"));
 		
 	}
 
